@@ -55,23 +55,23 @@ var device = null;
         return info;
     }
     //未触发
-    function formatDFUInterfaceAlternate(settings) {
-        console.log("formatDFUInterfaceAlternate");
-        let mode = "Unknown"
-        if (settings.alternate.interfaceProtocol == 0x01) {
-            mode = "Runtime";
-        } else if (settings.alternate.interfaceProtocol == 0x02) {
-            mode = "DFU";
-        }
+    // function formatDFUInterfaceAlternate(settings) {
+    //     console.log("formatDFUInterfaceAlternate");
+    //     let mode = "Unknown"
+    //     if (settings.alternate.interfaceProtocol == 0x01) {
+    //         mode = "Runtime";
+    //     } else if (settings.alternate.interfaceProtocol == 0x02) {
+    //         mode = "DFU";
+    //     }
 
-        const cfg = settings.configuration.configurationValue;
-        const intf = settings["interface"].interfaceNumber;
-        const alt = settings.alternate.alternateSetting;
-        const name = (settings.name) ? settings.name : "UNKNOWN";
+    //     const cfg = settings.configuration.configurationValue;
+    //     const intf = settings["interface"].interfaceNumber;
+    //     const alt = settings.alternate.alternateSetting;
+    //     const name = (settings.name) ? settings.name : "UNKNOWN";
 
-        return `${mode}: cfg=${cfg}, intf=${intf}, alt=${alt}, name="${name}"`;
-    }
-
+    //     return `${mode}: cfg=${cfg}, intf=${intf}, alt=${alt}, name="${name}"`;
+    // }
+    //需要保留
     async function fixInterfaceNames(device_, interfaces) {
         console.log("fixInterfaceNames");
         // Check if any interface names were not read correctly
@@ -93,35 +93,35 @@ var device = null;
             }
         }
     }
-    //根据接口列表填充表单 以及实现不同功能
-    function populateInterfaceList(form, device_, interfaces) {
-        console.log("populateInterfaceList");
-        let old_choices = Array.from(form.getElementsByTagName("div"));
-        for (let radio_div of old_choices) {
-            form.removeChild(radio_div);
-        }
+    //根据接口列表填充表单 以及实现不同功能  暂未使用
+    // function populateInterfaceList(form, device_, interfaces) {
+    //     console.log("populateInterfaceList");
+    //     let old_choices = Array.from(form.getElementsByTagName("div"));
+    //     for (let radio_div of old_choices) {
+    //         form.removeChild(radio_div);
+    //     }
 
-        let button = form.getElementsByTagName("button")[0];
+    //     let button = form.getElementsByTagName("button")[0];
 
-        for (let i = 0; i < interfaces.length; i++) {
-            let radio = document.createElement("input");
-            radio.type = "radio";
-            radio.name = "interfaceIndex";
-            radio.value = i;
-            radio.id = "interface" + i;
-            radio.required = true;
+    //     for (let i = 0; i < interfaces.length; i++) {
+    //         let radio = document.createElement("input");
+    //         radio.type = "radio";
+    //         radio.name = "interfaceIndex";
+    //         radio.value = i;
+    //         radio.id = "interface" + i;
+    //         radio.required = true;
 
-            let label = document.createElement("label");
-            label.textContent = formatDFUInterfaceAlternate(interfaces[i]);
-            label.className = "radio"
-            label.setAttribute("for", "interface" + i);
+    //         let label = document.createElement("label");
+    //         label.textContent = formatDFUInterfaceAlternate(interfaces[i]);
+    //         label.className = "radio"
+    //         label.setAttribute("for", "interface" + i);
 
-            let div = document.createElement("div");
-            div.appendChild(radio);
-            div.appendChild(label);
-            form.insertBefore(div, button);
-        }
-    }
+    //         let div = document.createElement("div");
+    //         div.appendChild(radio);
+    //         div.appendChild(label);
+    //         form.insertBefore(div, button);
+    //     }
+    // }
     //需要保留
     function getDFUDescriptorProperties(device) {
         console.log("getDFUDescriptorProperties");
@@ -232,7 +232,7 @@ var device = null;
 
     document.addEventListener('DOMContentLoaded', event => {
         let connectButton = document.querySelector("#connect");
-        let detachButton = document.querySelector("#detach");
+        //   let detachButton = document.querySelector("#detach");
         let downloadButton = document.querySelector("#download");
         let uploadButton = document.querySelector("#upload");
         let statusDisplay = document.querySelector("#status");
@@ -284,8 +284,8 @@ var device = null;
         let firmwareFileField = document.querySelector("#firmwareFile");
         let firmwareFile = null;
 
-        let downloadLog = document.querySelector("#downloadLog");
-        let uploadLog = document.querySelector("#uploadLog");
+        //   let downloadLog = document.querySelector("#downloadLog");
+        // let uploadLog = document.querySelector("#uploadLog");
 
         let manifestationTolerant = true;
 
@@ -297,13 +297,15 @@ var device = null;
                 statusDisplay.textContent = reason;
             }
 
-            connectButton.textContent = "Connect";
-            infoDisplay.textContent = "";
-            dfuDisplay.textContent = "";
-            detachButton.disabled = true;
-            uploadButton.disabled = true;
+            connectButton.textContent = "连接";
             downloadButton.disabled = true;
-            firmwareFileField.disabled = true;
+
+            // infoDisplay.textContent = "";
+            // dfuDisplay.textContent = "";
+            // detachButton.disabled = true;
+            // uploadButton.disabled = true;
+
+            // firmwareFileField.disabled = true;
         }
         //获取设备描述  dfu更新结束后调用  保留
         function onUnexpectedDisconnect(event) {
@@ -338,8 +340,9 @@ var device = null;
             let memorySummary = "";
             if (desc && Object.keys(desc).length > 0) {
                 device.properties = desc;
-                let info = `WillDetach=${desc.WillDetach}, ManifestationTolerant=${desc.ManifestationTolerant}, CanUpload=${desc.CanUpload}, CanDnload=${desc.CanDnload}, TransferSize=${desc.TransferSize}, DetachTimeOut=${desc.DetachTimeOut}, Version=${hex4(desc.DFUVersion)}`;
-                dfuDisplay.textContent += "\n" + info;
+                // let info = `WillDetach=${desc.WillDetach}, ManifestationTolerant=${desc.ManifestationTolerant}, CanUpload=${desc.CanUpload}, CanDnload=${desc.CanDnload}, TransferSize=${desc.TransferSize}, DetachTimeOut=${desc.DetachTimeOut}, Version=${hex4(desc.DFUVersion)}`;
+                // console.log("???", info);
+                // dfuDisplay.textContent += "\n" + info;
                 transferSizeField.value = desc.TransferSize;
                 transferSize = desc.TransferSize;
                 if (desc.CanDnload) {
@@ -394,8 +397,8 @@ var device = null;
             device.logProgress = logProgress;
 
             // Clear logs
-            clearLog(uploadLog);
-            clearLog(downloadLog);
+            //  clearLog(uploadLog);
+            //  clearLog(downloadLog);
 
             // Display basic USB information
             statusDisplay.textContent = '';
@@ -412,13 +415,13 @@ var device = null;
             // Update buttons based on capabilities
             if (device.settings.alternate.interfaceProtocol == 0x01) {
                 // Runtime
-                detachButton.disabled = false;
+                //   detachButton.disabled = false;
                 uploadButton.disabled = true;
                 downloadButton.disabled = true;
                 firmwareFileField.disabled = true;
             } else {
                 // DFU
-                detachButton.disabled = true;
+                //  detachButton.disabled = true;
                 uploadButton.disabled = false;
                 downloadButton.disabled = false;
                 firmwareFileField.disabled = false;
@@ -447,67 +450,67 @@ var device = null;
             return device;
         }
         //根据vid和serial自动连接设备
-        function autoConnect(vid, serial) {
-            console.log("autoConnect");
-            dfu.findAllDfuInterfaces().then(
-                async dfu_devices => {
-                    let matching_devices = [];
-                    for (let dfu_device of dfu_devices) {
-                        if (serial) {
-                            if (dfu_device.device_.serialNumber == serial) {
-                                matching_devices.push(dfu_device);
-                            }
-                        } else if (dfu_device.device_.vendorId == vid) {
-                            matching_devices.push(dfu_device);
-                        }
-                    }
+        // function autoConnect(vid, serial) {
+        //     console.log("autoConnect");
+        //     dfu.findAllDfuInterfaces().then(
+        //         async dfu_devices => {
+        //             let matching_devices = [];
+        //             for (let dfu_device of dfu_devices) {
+        //                 if (serial) {
+        //                     if (dfu_device.device_.serialNumber == serial) {
+        //                         matching_devices.push(dfu_device);
+        //                     }
+        //                 } else if (dfu_device.device_.vendorId == vid) {
+        //                     matching_devices.push(dfu_device);
+        //                 }
+        //             }
 
-                    if (matching_devices.length == 0) {
-                        statusDisplay.textContent = 'No device found.';
-                    } else {
-                        if (matching_devices.length == 1) {
-                            statusDisplay.textContent = 'Connecting...';
-                            device = matching_devices[0];
-                            console.log(device);
-                            device = await connect(device);
-                        } else {
-                            statusDisplay.textContent = "Multiple DFU interfaces found.";
-                        }
-                        vidField.value = "0x" + hex4(matching_devices[0].device_.vendorId).toUpperCase();
-                        vid = matching_devices[0].device_.vendorId;
-                    }
-                }
-            );
-        }
+        //             if (matching_devices.length == 0) {
+        //                 statusDisplay.textContent = 'No device found.';
+        //             } else {
+        //                 if (matching_devices.length == 1) {
+        //                     statusDisplay.textContent = 'Connecting...';
+        //                     device = matching_devices[0];
+        //                     console.log(device);
+        //                     device = await connect(device);
+        //                 } else {
+        //                     statusDisplay.textContent = "Multiple DFU interfaces found.";
+        //                 }
+        //                 vidField.value = "0x" + hex4(matching_devices[0].device_.vendorId).toUpperCase();
+        //                 vid = matching_devices[0].device_.vendorId;
+        //             }
+        //         }
+        //     );
+        // }
         //监听vid和transferSize的变化
-        vidField.addEventListener("change", function () {
-            console.log("vid changed Vid变化");
-            vid = parseInt(vidField.value, 16);
-        });
-        //监听transferSize的变化 不需要
-        transferSizeField.addEventListener("change", function () {
-            console.log("transferSize changed pid变化");
-            transferSize = parseInt(transferSizeField.value);
-        });
-        // 监听startAddress的变化   不需要
-        dfuseStartAddressField.addEventListener("change", function (event) {
-            console.log("startAddress changed");
-            const field = event.target;
-            let address = parseInt(field.value, 16);
-            if (isNaN(address)) {
-                field.setCustomValidity("Invalid hexadecimal start address");
-            } else if (device && device.memoryInfo) {
-                if (device.getSegment(address) !== null) {
-                    device.startAddress = address;
-                    field.setCustomValidity("");
-                    dfuseUploadSizeField.max = device.getMaxReadSize(address);
-                } else {
-                    field.setCustomValidity("Address outside of memory map");
-                }
-            } else {
-                field.setCustomValidity("");
-            }
-        });
+        // vidField.addEventListener("change", function () {
+        //     console.log("vid changed Vid变化");
+        //     vid = parseInt(vidField.value, 16);
+        // });
+        // //监听transferSize的变化 不需要
+        // transferSizeField.addEventListener("change", function () {
+        //     console.log("transferSize changed pid变化");
+        //     transferSize = parseInt(transferSizeField.value);
+        // });
+        // // 监听startAddress的变化   不需要
+        // dfuseStartAddressField.addEventListener("change", function (event) {
+        //     console.log("startAddress changed");
+        //     const field = event.target;
+        //     let address = parseInt(field.value, 16);
+        //     if (isNaN(address)) {
+        //         field.setCustomValidity("Invalid hexadecimal start address");
+        //     } else if (device && device.memoryInfo) {
+        //         if (device.getSegment(address) !== null) {
+        //             device.startAddress = address;
+        //             field.setCustomValidity("");
+        //             dfuseUploadSizeField.max = device.getMaxReadSize(address);
+        //         } else {
+        //             field.setCustomValidity("Address outside of memory map");
+        //         }
+        //     } else {
+        //         field.setCustomValidity("");
+        //     }
+        // });
         //连接按钮 设备连接    
         connectButton.addEventListener('click', function () {
             console.log("connectButton clicked");
@@ -530,14 +533,14 @@ var device = null;
                         } else if (interfaces.length == 1) {
                             await fixInterfaceNames(selectedDevice, interfaces);
                             device = await connect(new dfu.Device(selectedDevice, interfaces[0]));
-                        } else {
-                            await fixInterfaceNames(selectedDevice, interfaces);
-                            populateInterfaceList(interfaceForm, selectedDevice, interfaces);
-                            async function connectToSelectedInterface() {
-                                interfaceForm.removeEventListener('submit', this);
-                                const index = interfaceForm.elements["interfaceIndex"].value;
-                                device = await connect(new dfu.Device(selectedDevice, interfaces[index]));
-                            }
+                            // } else {
+                            //     await fixInterfaceNames(selectedDevice, interfaces);
+                            //     populateInterfaceList(interfaceForm, selectedDevice, interfaces);
+                            //     async function connectToSelectedInterface() {
+                            //         interfaceForm.removeEventListener('submit', this);
+                            //         const index = interfaceForm.elements["interfaceIndex"].value;
+                            //         device = await connect(new dfu.Device(selectedDevice, interfaces[index]));
+                            //     }
 
                             interfaceForm.addEventListener('submit', connectToSelectedInterface);
 
@@ -555,77 +558,77 @@ var device = null;
             }
         });
         // 监听dfuseUploadSize的变化   暂不使用
-        detachButton.addEventListener('click', function () {
-            console.log("detach button clicked");
-            if (device) {
-                device.detach().then(
-                    async len => {
-                        let detached = false;
-                        try {
-                            await device.close();
-                            await device.waitDisconnected(5000);
-                            detached = true;
-                        } catch (err) {
-                            console.log("Detach failed: " + err);
-                        }
+        // detachButton.addEventListener('click', function () {
+        //     console.log("detach button clicked");
+        //     if (device) {
+        //         device.detach().then(
+        //             async len => {
+        //                 let detached = false;
+        //                 try {
+        //                     await device.close();
+        //                     await device.waitDisconnected(5000);
+        //                     detached = true;
+        //                 } catch (err) {
+        //                     console.log("Detach failed: " + err);
+        //                 }
 
-                        onDisconnect();
-                        device = null;
-                        if (detached) {
-                            // Wait a few seconds and try reconnecting
-                            setTimeout(autoConnect, 5000);
-                        }
-                    },
-                    async error => {
-                        await device.close();
-                        onDisconnect(error);
-                        device = null;
-                    }
-                );
-            }
-        });
+        //                 onDisconnect();
+        //                 device = null;
+        //                 if (detached) {
+        //                     // Wait a few seconds and try reconnecting
+        //                     setTimeout(autoConnect, 5000);
+        //                 }
+        //             },
+        //             async error => {
+        //                 await device.close();
+        //                 onDisconnect(error);
+        //                 device = null;
+        //             }
+        //         );
+        //     }
+        // });
         //  监听uploadButton的变化  从设备获取dfu文件 暂不使用
-        uploadButton.addEventListener('click', async function (event) {
-            console.log("upload button clicked");
-            event.preventDefault();
-            event.stopPropagation();
-            if (!configForm.checkValidity()) {
-                configForm.reportValidity();
-                return false;
-            }
+        // uploadButton.addEventListener('click', async function (event) {
+        //     console.log("upload button clicked");
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     if (!configForm.checkValidity()) {
+        //         configForm.reportValidity();
+        //         return false;
+        //     }
 
-            if (!device || !device.device_.opened) {
-                onDisconnect();
-                device = null;
-            } else {
-                setLogContext(uploadLog);
-                clearLog(uploadLog);
-                try {
-                    let status = await device.getStatus();
-                    if (status.state == dfu.dfuERROR) {
-                        await device.clearStatus();
-                    }
-                } catch (error) {
-                    device.logWarning("Failed to clear status");
-                }
+        //     if (!device || !device.device_.opened) {
+        //         onDisconnect();
+        //         device = null;
+        //     } else {
+        //         setLogContext(uploadLog);
+        //         clearLog(uploadLog);
+        //         try {
+        //             let status = await device.getStatus();
+        //             if (status.state == dfu.dfuERROR) {
+        //                 await device.clearStatus();
+        //             }
+        //         } catch (error) {
+        //             device.logWarning("Failed to clear status");
+        //         }
 
-                let maxSize = Infinity;
-                if (!dfuseUploadSizeField.disabled) {
-                    maxSize = parseInt(dfuseUploadSizeField.value);
-                }
+        //         let maxSize = Infinity;
+        //         if (!dfuseUploadSizeField.disabled) {
+        //             maxSize = parseInt(dfuseUploadSizeField.value);
+        //         }
 
-                try {
-                    const blob = await device.do_upload(transferSize, maxSize);
-                    saveAs(blob, "firmware.bin");
-                } catch (error) {
-                    logError(error);
-                }
+        //         try {
+        //             const blob = await device.do_upload(transferSize, maxSize);
+        //             saveAs(blob, "firmware.bin");
+        //         } catch (error) {
+        //             logError(error);
+        //         }
 
-                setLogContext(null);
-            }
+        //         setLogContext(null);
+        //     }
 
-            return false;
-        });
+        //     return false;
+        // });
         // 监听firmwareFileField的变化    读取dfu文件
         firmwareFileField.addEventListener("change", function () {
             console.log("firmwareFileField changed");
@@ -652,8 +655,8 @@ var device = null;
 
             if (device && firmwareFile != null) {
                 console.log("开始更新");
-                setLogContext(downloadLog);
-                clearLog(downloadLog);
+                //    setLogContext(downloadLog);
+                //    clearLog(downloadLog);
                 try {
                     let status = await device.getStatus();
                     if (status.state == dfu.dfuERROR) {
@@ -694,13 +697,13 @@ var device = null;
         });
 
         // Check if WebUSB is available
-        //断开连接
+        //断开连接  保留
         if (typeof navigator.usb !== 'undefined') {
             console.log("断开连接？")
             navigator.usb.addEventListener("disconnect", onUnexpectedDisconnect);
             // Try connecting automatically
             if (fromLandingPage) {
-                autoConnect(vid, serial);
+                //     autoConnect(vid, serial);
             }
         } else {
             statusDisplay.textContent = 'WebUSB not available.'
