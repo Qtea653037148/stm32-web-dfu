@@ -146,9 +146,9 @@ var device = null;
                     return {
                         WillDetach: ((funcDesc.bmAttributes & 0x08) != 0),
                         ManifestationTolerant: ((funcDesc.bmAttributes & 0x04) != 0),
-                        CanUpload: ((funcDesc.bmAttributes & 0x02) != 0),
+                        //     CanUpload: ((funcDesc.bmAttributes & 0x02) != 0),
                         CanDnload: ((funcDesc.bmAttributes & 0x01) != 0),
-                        TransferSize: funcDesc.wTransferSize,
+                        //   TransferSize: funcDesc.wTransferSize,
                         DetachTimeOut: funcDesc.wDetachTimeOut,
                         DFUVersion: funcDesc.bcdDFUVersion
                     };
@@ -234,14 +234,14 @@ var device = null;
         let connectButton = document.querySelector("#connect");
         //   let detachButton = document.querySelector("#detach");
         let downloadButton = document.querySelector("#download");
-        let uploadButton = document.querySelector("#upload");
-        let statusDisplay = document.querySelector("#status");
-        let infoDisplay = document.querySelector("#usbInfo");
-        let dfuDisplay = document.querySelector("#dfuInfo");
-        let vidField = document.querySelector("#vid");
-        let interfaceDialog = document.querySelector("#interfaceDialog");
-        let interfaceForm = document.querySelector("#interfaceForm");
-        let interfaceSelectButton = document.querySelector("#selectInterface");
+        // let uploadButton = document.querySelector("#upload");
+        //  let statusDisplay = document.querySelector("#status");
+        //   let infoDisplay = document.querySelector("#usbInfo");
+        //  let dfuDisplay = document.querySelector("#dfuInfo");
+        //   let vidField = document.querySelector("#vid");
+        //    let interfaceDialog = document.querySelector("#interfaceDialog");
+        //    let interfaceForm = document.querySelector("#interfaceForm");
+        //    let interfaceSelectButton = document.querySelector("#selectInterface");
 
         let searchParams = new URLSearchParams(window.location.search);
         let fromLandingPage = false;
@@ -255,7 +255,7 @@ var device = null;
                 } else {
                     vid = parseInt(vidString, 10);
                 }
-                vidField.value = "0x" + hex4(vid).toUpperCase();
+                //  vidField.value = "0x" + hex4(vid).toUpperCase();
                 fromLandingPage = true;
             } catch (error) {
                 console.log("Bad VID " + vidString + ":" + error);
@@ -273,13 +273,13 @@ var device = null;
             fromLandingPage = true;
         }
 
-        let configForm = document.querySelector("#configForm");
+        //   let configForm = document.querySelector("#configForm");
 
-        let transferSizeField = document.querySelector("#transferSize");
-        let transferSize = parseInt(transferSizeField.value);
+        // let transferSizeField = document.querySelector("#transferSize");
+        //   let transferSize = parseInt(transferSizeField.value);
 
-        let dfuseStartAddressField = document.querySelector("#dfuseStartAddress");
-        let dfuseUploadSizeField = document.querySelector("#dfuseUploadSize");
+        //  let dfuseStartAddressField = document.querySelector("#dfuseStartAddress");
+        //     let dfuseUploadSizeField = document.querySelector("#dfuseUploadSize");
 
         let firmwareFileField = document.querySelector("#firmwareFile");
         let firmwareFile = null;
@@ -293,9 +293,9 @@ var device = null;
         //断开连接   更新结束后自动  保留
         function onDisconnect(reason) {
             console.log("Disconnected: " + reason);
-            if (reason) {
-                statusDisplay.textContent = reason;
-            }
+            // if (reason) {
+            //     statusDisplay.textContent = reason;
+            // }
 
             connectButton.textContent = "连接";
             downloadButton.disabled = true;
@@ -338,22 +338,32 @@ var device = null;
             }
 
             let memorySummary = "";
+            console.log("l连接成功")
+
+            let url = "https://www.guangyanjiaohu.com/download/dfu/cz60.bin"
+            //let url = "..//download/dfu/cz60.bin"
+            //  fetch(url, { mode: 'no-cors' });
+
+            //跨域报错
+            //   downloadFileFromUrl(url);//联网获取bin文件
+
+
             if (desc && Object.keys(desc).length > 0) {
                 device.properties = desc;
                 // let info = `WillDetach=${desc.WillDetach}, ManifestationTolerant=${desc.ManifestationTolerant}, CanUpload=${desc.CanUpload}, CanDnload=${desc.CanDnload}, TransferSize=${desc.TransferSize}, DetachTimeOut=${desc.DetachTimeOut}, Version=${hex4(desc.DFUVersion)}`;
                 // console.log("???", info);
                 // dfuDisplay.textContent += "\n" + info;
-                transferSizeField.value = desc.TransferSize;
-                transferSize = desc.TransferSize;
+                //    transferSizeField.value = desc.TransferSize;
+                //    transferSize = desc.TransferSize;
                 if (desc.CanDnload) {
                     manifestationTolerant = desc.ManifestationTolerant;
                 }
 
                 if (device.settings.alternate.interfaceProtocol == 0x02) {
-                    if (!desc.CanUpload) {
-                        uploadButton.disabled = true;
-                        dfuseUploadSizeField.disabled = true;
-                    }
+                    // if (!desc.CanUpload) {
+                    //     uploadButton.disabled = true;
+                    //     dfuseUploadSizeField.disabled = true;
+                    // }
                     if (!desc.CanDnload) {
                         dnloadButton.disabled = true;
                     }
@@ -401,50 +411,50 @@ var device = null;
             //  clearLog(downloadLog);
 
             // Display basic USB information
-            statusDisplay.textContent = '';
-            connectButton.textContent = 'Disconnect';
-            infoDisplay.textContent = (
-                "Name: " + device.device_.productName + "\n" +
-                "MFG: " + device.device_.manufacturerName + "\n" +
-                "Serial: " + device.device_.serialNumber + "\n"
-            );
+            //   statusDisplay.textContent = '';
+            connectButton.textContent = '断开连接';
+            // infoDisplay.textContent = (
+            //     "Name: " + device.device_.productName + "\n" +
+            //     "MFG: " + device.device_.manufacturerName + "\n" +
+            //     "Serial: " + device.device_.serialNumber + "\n"
+            // );
 
             // Display basic dfu-util style info
-            dfuDisplay.textContent = formatDFUSummary(device) + "\n" + memorySummary;
+            //    dfuDisplay.textContent = formatDFUSummary(device) + "\n" + memorySummary;
 
             // Update buttons based on capabilities
             if (device.settings.alternate.interfaceProtocol == 0x01) {
                 // Runtime
                 //   detachButton.disabled = false;
-                uploadButton.disabled = true;
+                //  uploadButton.disabled = true;
                 downloadButton.disabled = true;
                 firmwareFileField.disabled = true;
             } else {
                 // DFU
                 //  detachButton.disabled = true;
-                uploadButton.disabled = false;
+                //   uploadButton.disabled = false;
                 downloadButton.disabled = false;
                 firmwareFileField.disabled = false;
             }
 
             if (device.memoryInfo) {
-                let dfuseFieldsDiv = document.querySelector("#dfuseFields")
-                dfuseFieldsDiv.hidden = false;
-                dfuseStartAddressField.disabled = false;
-                dfuseUploadSizeField.disabled = false;
+                //    let dfuseFieldsDiv = document.querySelector("#dfuseFields")
+                //   dfuseFieldsDiv.hidden = false;
+                //  dfuseStartAddressField.disabled = false;
+                //   dfuseUploadSizeField.disabled = false;
                 let segment = device.getFirstWritableSegment();
                 if (segment) {
                     device.startAddress = segment.start;
-                    dfuseStartAddressField.value = "0x" + segment.start.toString(16);
-                    const maxReadSize = device.getMaxReadSize(segment.start);
-                    dfuseUploadSizeField.value = maxReadSize;
-                    dfuseUploadSizeField.max = maxReadSize;
+                    //   dfuseStartAddressField.value = "0x" + segment.start.toString(16);
+                    //    const maxReadSize = device.getMaxReadSize(segment.start);
+                    //     dfuseUploadSizeField.value = maxReadSize;
+                    //      dfuseUploadSizeField.max = maxReadSize;
                 }
             } else {
-                let dfuseFieldsDiv = document.querySelector("#dfuseFields")
-                dfuseFieldsDiv.hidden = true;
-                dfuseStartAddressField.disabled = true;
-                dfuseUploadSizeField.disabled = true;
+                //     let dfuseFieldsDiv = document.querySelector("#dfuseFields")
+                //    dfuseFieldsDiv.hidden = true;
+                //  dfuseStartAddressField.disabled = true;
+                //    dfuseUploadSizeField.disabled = true;
             }
 
             return device;
@@ -529,7 +539,7 @@ var device = null;
                         let interfaces = dfu.findDeviceDfuInterfaces(selectedDevice);
                         if (interfaces.length == 0) {
                             console.log(selectedDevice);
-                            statusDisplay.textContent = "The selected device does not have any USB DFU interfaces.";
+                            //   statusDisplay.textContent = "The selected device does not have any USB DFU interfaces.";
                         } else if (interfaces.length == 1) {
                             await fixInterfaceNames(selectedDevice, interfaces);
                             device = await connect(new dfu.Device(selectedDevice, interfaces[0]));
@@ -542,18 +552,18 @@ var device = null;
                             //         device = await connect(new dfu.Device(selectedDevice, interfaces[index]));
                             //     }
 
-                            interfaceForm.addEventListener('submit', connectToSelectedInterface);
+                            // interfaceForm.addEventListener('submit', connectToSelectedInterface);
 
-                            interfaceDialog.addEventListener('cancel', function () {
-                                interfaceDialog.removeEventListener('cancel', this);
-                                interfaceForm.removeEventListener('submit', connectToSelectedInterface);
-                            });
+                            // interfaceDialog.addEventListener('cancel', function () {
+                            //     interfaceDialog.removeEventListener('cancel', this);
+                            //     interfaceForm.removeEventListener('submit', connectToSelectedInterface);
+                            // });
 
-                            interfaceDialog.showModal();
+                            // interfaceDialog.showModal();
                         }
                     }
                 ).catch(error => {
-                    statusDisplay.textContent = error;
+                    //    statusDisplay.textContent = error;
                 });
             }
         });
@@ -643,15 +653,41 @@ var device = null;
                 console.log("读取到的信息是：", firmwareFile, file);
             }
         });
+        async function downloadFileFromUrl(url) {
+            try {
+                const response = await fetch(url);
+                // 代理示例（需部署到同源服务器）
+                // const response = await fetch(`https://guangyanjiaohu.com?url=${encodeURIComponent(url)}`);
+                //const response = await fetch(url, { mode: 'no-cors' });
+
+
+                console.log("111")
+                if (!response.ok) throw new Error('网络请求失败');
+                const blob = await response.blob(); // 将响应转换为Blob对象
+                let file = blob;
+                firmwareFile = null;
+                let reader = new FileReader();
+                reader.onload = function () {
+                    firmwareFile = reader.result;
+                };
+                reader.readAsArrayBuffer(file);
+                console.log("网络读取到的信息是：", firmwareFile, file);
+
+                return blob;
+            } catch (error) {
+                console.error('下载失败:', error);
+            }
+        }
+
+
+
+
         //dfu 更新按钮  主要更新函数
         downloadButton.addEventListener('click', async function (event) {
             console.log("downloadButton clicked");
             event.preventDefault();
             event.stopPropagation();
-            if (!configForm.checkValidity()) {
-                configForm.reportValidity();
-                return false;
-            }
+
 
             if (device && firmwareFile != null) {
                 console.log("开始更新");
@@ -666,6 +702,7 @@ var device = null;
                     device.logWarning("Failed to clear status");
                 }
                 console.log("开始更新2");
+                let transferSize = 1024;
                 await device.do_download(transferSize, firmwareFile, manifestationTolerant).then(
                     () => {
                         logInfo("Done!");
@@ -706,7 +743,7 @@ var device = null;
                 //     autoConnect(vid, serial);
             }
         } else {
-            statusDisplay.textContent = 'WebUSB not available.'
+            //    statusDisplay.textContent = 'WebUSB not available.'
             connectButton.disabled = true;
         }
     });
